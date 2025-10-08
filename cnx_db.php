@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ERROR | E_PARSE);
-$zona_horaria = file_get_contents('https://pendientes.hgaribay.com/zonahoraria.txt');
-date_default_timezone_set ($zona_horaria);
+//$zona_horaria = file_get_contents('https://pendientes.hgaribay.com/zonahoraria.txt');
+//date_default_timezone_set ($zona_horaria);
 if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
    $t=time();
    while (time()<$t+5) {}
@@ -16,7 +16,7 @@ if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
    }
 }
 
-$base='bj88';
+/*$base='bj88';
 mysql_select_db($base);
 $now = new DateTime();
 $mins = $now->getOffset()/60;
@@ -25,9 +25,9 @@ $mins = abs($mins);
 $hrs = floor($mins/60);
 $mins -= $hrs*60;
 $offset = sprintf('%+d:%02d', $hrs*$sgn, $mins);
-mysql_query("SET time_zone='$offset'");
-/*GLOBAL $mysqli;
-$mysqli = new mysqli('localhost', 'puebla', 'bAllenA6##6', 'puebla');
+mysql_query("SET time_zone='$offset'");*/
+GLOBAL $mysqli;
+$mysqli = new mysqli('mysql', 'bj88', 'skYYoung73', 'bj88');
 
 function mysql_query($query){
    GLOBAL $mysqli;
