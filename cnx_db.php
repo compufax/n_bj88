@@ -60,7 +60,7 @@ function mysql_num_rows($result)
 function mysql_insert_id(){
    GLOBAL $mysqli;
    return $mysqli->insert_id;
-}*/
+}
 
 if (!function_exists("GetSQLValueString")) {
     function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
