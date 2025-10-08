@@ -1,0 +1,22 @@
+#title2note{
+	position: fixed;
+	z-index: 2;
+	bottom: 0;
+	right: 0;
+	width: 20em;
+	margin: 1em;
+	padding: 7px 5px 7px 10px;
+	font: 12px/1.2em "Lucida Console", "Courier New", monospace;
+	text-align: left;
+	color: #111;
+	background-color: #FFFFB4;
+	border: 1px solid #111;
+}
+/* star html hack - IE only */
+* html #title2note{
+	position: absolute;
+}
+/* a bet on future IEs */
+#title2note[id]{
+	position: fixed;
+}

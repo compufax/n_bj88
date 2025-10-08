@@ -1,0 +1,44 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>Tag-based MultiCell</TITLE>
+<STYLE>
+BODY {font-family:"Times New Roman",serif}
+H2 {color:#4000A0}
+.st {font-weight:bold; color:#900000}
+</STYLE>
+</HEAD>
+<BODY>
+<H2>Tag-based MultiCell</H2>
+<H4 CLASS="st">Informations</H4>Author: <A HREF="mailto:klodoma@ar-sd.net?subject=Tag-based%20MultiCell">Bintintan Andrei</A><BR>License: Free for non-commercial use
+<H4 CLASS="st">Description</H4>This class provides an extension of the MultiCell method, where the text can be tag-formatted. The use of
+tags allows to change the font, the style (bold, italic, underline), the size, and the color of characters.<BR>
+<BR>
+There are 2 methods:<BR>
+<BR>
+<TT>SetStyle(<B>string</B> tag, <B>string</B> family, <B>string</B> style, <B>int</B> size, <B>string</B> color [, <B>int</B> indent])</TT><BR>
+<BR>
+Sets the current settings for the specified tag name. The names "ttags" and "pparg" are reserved for tab spaces. Don't use
+empty tag names.<BR>
+<BR>
+<U>tag</U>: name of the tag<BR>
+<U>family</U>: family of the font<BR>
+<U>style</U>: N (normal) or combination of B, I, U<BR>
+<U>size</U>: size<BR>
+<U>color</U>: color (comma-separated RGB components)<BR>
+<BR>
+<TT>MultiCellTag(<B>float</B> w, <B>float</B> h, <B>string</B> txt [, <B>mixed</B> border [, <B>string</B> align [, <B>int</B> fill]]])</TT><BR>
+<BR>
+Outputs the tag-based MultiCell. \n = new line, \t = tab space. All parameters are and
+behave the same as the MultiCell function.<BR>
+<BR>
+<U>w</U>: width of cells. If 0, they extend up to the right margin of the page.<BR>
+<U>h</U>: height of cells.<BR>
+<U>txt</U>: string to print.<BR>
+<U>border</U>: Indicates if borders must be drawn around the cell block.<BR>
+<U>align</U>: Sets the text alignment. Possible values are: L, C, R, J.<BR>
+<U>fill</U>: Indicates if the cell background must be painted (1) or transparent (0).<BR>
+<BR>
+See the class and example for more details on the methods and parameters.
+</BODY>
+</HTML>
