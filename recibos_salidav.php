@@ -4,12 +4,12 @@ require_once('cnx_db.php');
 require_once('globales.php');
 
 if($_POST['cmd']==101){
-	$res=mysql_db_query($base,"SELECT * FROM plazas");
+	$res=mysql_query("SELECT * FROM plazas");
 	while($Plaza=mysql_fetch_array($res)){
 		$array_plaza[$row['cve']]=$row['nombre'];
 	}
 
-	$rsPuesto=mysql_db_query($base,"SELECT * FROM puestos");
+	$rsPuesto=mysql_query("SELECT * FROM puestos");
 	while($Puesto=mysql_fetch_array($rsPuesto)){
 		$array_puesto[$Puesto['cve']]=$Puesto['nombre'];
 	}

@@ -21,10 +21,10 @@ function getRealIP()
                :
                "unknown" );
 
-      // los proxys van añadiendo al final de esta cabecera
+      // los proxys van aï¿½adiendo al final de esta cabecera
       // las direcciones ip que van "ocultando". Para localizar la ip real
       // del usuario se comienza a mirar por el principio hasta encontrar
-      // una dirección ip que no sea del rango privado. En caso de no
+      // una direcciï¿½n ip que no sea del rango privado. En caso de no
       // encontrarse ninguna se toma como valor el REMOTE_ADDR
 
       $entries = split('[, ]', $_SERVER['HTTP_X_FORWARDED_FOR']);
@@ -73,7 +73,7 @@ if(!$_SESSION['CveUsuario'] && !$_SESSION['NomUsuario']) {
 	header("Location: index.php");
 }
 if($_SESSION['CveUsuario']!=1 && $_POST['loginUser']!="root"){
-	$rsCerrado=mysql_db_query($base,"SELECT * FROM usuarios WHERE cve='1'") or die(mysql_error());
+	$rsCerrado=mysql_query("SELECT * FROM usuarios WHERE cve='1'") or die(mysql_error());
 	$Cerrado=mysql_fetch_array($rsCerrado);
 	if($Cerrado['cerrar_sistema']=='S'){
 		echo '<script>window.location="index.php";</script>';
@@ -96,7 +96,7 @@ $array_modulos=array(1=>"Catalogos",2=>"Vales",
 4=>"Conductores",
 99=>"Administracion"
 );*/
-$res = mysql_db_query($base,"SELECT cve,nombre FROM plazas ORDER BY nombre");
+$res = mysql_query("SELECT cve,nombre FROM plazas ORDER BY nombre");
 while($row = mysql_fetch_array($res)){
 	$array_plaza[$row['cve']]=$row['nombre'];
 }
@@ -147,7 +147,7 @@ if (isset($_POST['loginUser']) && isset($_POST['loginPassword'])) {
 			  GetSQLValueString($loginUsername, "text"), GetSQLValueString($password, "text")); 
 	   
 
-	$LoginRS = mysql_db_query($base,$LoginRS_query);
+	$LoginRS = mysql_query($LoginRS_query);
 
 	$loginFoundUser = mysql_num_rows($LoginRS);
 
@@ -156,7 +156,7 @@ if (isset($_POST['loginUser']) && isset($_POST['loginPassword'])) {
 		$Usuario=mysql_fetch_array($LoginRS);
 
 		if($Usuario['cve']!=1){
-			$rsCerrado=mysql_db_query($base,"SELECT * FROM usuarios WHERE cve='1'");
+			$rsCerrado=mysql_query("SELECT * FROM usuarios WHERE cve='1'");
 			$Cerrado=mysql_fetch_array($rsCerrado);
 			if($Cerrado['cerrar_sistema']=='S'){
 				echo '<script>window.location="index.php";</script>';
@@ -164,7 +164,7 @@ if (isset($_POST['loginUser']) && isset($_POST['loginPassword'])) {
 		}
 		$ip=getRealIP();
 		$fechahora=date( "Y-m-d H:i:s" , strtotime ( "0 hour" , strtotime(date("Y-m-d H:i:s")) ) );
-		mysql_db_query($base,"INSERT registros_sistema SET usuario='".$Usuario['cve']."',entrada='".$fechahora."',ip='$ip'");
+		mysql_query("INSERT registros_sistema SET usuario='".$Usuario['cve']."',entrada='".$fechahora."',ip='$ip'");
 		$reg_sistema=mysql_insert_id();
 
 		//Creamos la sesion
@@ -190,15 +190,15 @@ if (isset($_POST['loginUser']) && isset($_POST['loginPassword'])) {
 			$_SESSION['modulo'.$k]=false;
 		}
 		if($Usuario['cve']>1){
-			$resM=mysql_db_query($base,"SELECT * FROM menu");
+			$resM=mysql_query("SELECT * FROM menu");
 			while($rowM=mysql_fetch_array($resM)){
-				$re=mysql_db_query($base,"SELECT * FROM usuario_accesos WHERE usuario='".."'");
+				$re=mysql_query("SELECT * FROM usuario_accesos WHERE usuario='".."'");
 				$_SESSION[$rowM['link']]=3;
 				$_SESSION['modulo'.$rowM['modulo']]=true;
 			}
 		}
 		else{
-			$resM=mysql_db_query($base,"SELECT * FROM menu");
+			$resM=mysql_query("SELECT * FROM menu");
 			while($rowM=mysql_fetch_array($resM)){
 				$_SESSION[$rowM['link']]=3;
 				$_SESSION['modulo'.$rowM['modulo']]=true;
@@ -237,7 +237,7 @@ function top($_SESSION,$enter=0) {
 
 	
 
-	$menuRS=mysql_db_query($base,"SELECT * FROM menu WHERE cve='".$_POST['cvemenu']."'");
+	$menuRS=mysql_query("SELECT * FROM menu WHERE cve='".$_POST['cvemenu']."'");
 
 	while($Menu=mysql_fetch_array($menuRS)) {
 
@@ -450,7 +450,7 @@ function top2($_SESSION) {
 
 	
 
-	$menuRS=mysql_db_query($base,"SELECT * FROM menu");
+	$menuRS=mysql_query("SELECT * FROM menu");
 
 	while($Menu=mysql_fetch_array($menuRS)) {
 
@@ -717,7 +717,7 @@ function nivelUsuario(){
 		return 3;
 	}
 	else{
-		$res=mysql_db_query($base,"SELECT * FROM usuario_accesos WHERE usuario='".$_POST['cveusuario']."' AND menu='".$_POST['cvemenu']."'");
+		$res=mysql_query("SELECT * FROM usuario_accesos WHERE usuario='".$_POST['cveusuario']."' AND menu='".$_POST['cvemenu']."'");
 		if($row=mysql_fetch_array($res)){
 			return $row['acceso'];
 		}
@@ -746,10 +746,10 @@ function menuppal2($_SESSION) {
 		$mostrar="";
 		foreach($array_modulos as $k=>$v){ 
 			if($_POST['cveusuario']==1){
-				$rs=mysql_db_query($base,"SELECT * FROM menu WHERE modulo='$k' ORDER BY orden");
+				$rs=mysql_query("SELECT * FROM menu WHERE modulo='$k' ORDER BY orden");
 			}
 			else{
-				$rs=mysql_db_query($base,"SELECT a.* FROM menu as a INNER JOIN usuario_accesos as b ON (b.menu=a.cve AND b.usuario='".$_POST['cveusuario']."' AND b.acceso>0) WHERE a.modulo='$k' ORDER BY a.orden");
+				$rs=mysql_query("SELECT a.* FROM menu as a INNER JOIN usuario_accesos as b ON (b.menu=a.cve AND b.usuario='".$_POST['cveusuario']."' AND b.acceso>0) WHERE a.modulo='$k' ORDER BY a.orden");
 			}
 			if(mysql_num_rows($rs)>0){
 				
@@ -1118,7 +1118,7 @@ echo '';
 			}
 			$fecha=date( "Y-m-d" , strtotime ( "+2 day" , strtotime($fecha) ) );
 		}
-		$res=mysql_db_query($base,"SELECT TO_DAYS('$fechasem')-TO_DAYS('$fecha')");
+		$res=mysql_query("SELECT TO_DAYS('$fechasem')-TO_DAYS('$fecha')");
 		$row=mysql_fetch_array($res);
 		$semana=intval($row[0]/7)+1;
 		return $semana;

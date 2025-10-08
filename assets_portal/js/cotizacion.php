@@ -9,7 +9,7 @@ if($_GET['usuario']>0){
 	$_POST['usuario'] = $_GET['usuario'];
 }
 
-$res = mysql_db_query($base,"SELECT * FROM cat_kyocera ORDER BY descripcion,modelo");
+$res = mysql_query("SELECT * FROM cat_kyocera ORDER BY descripcion,modelo");
 while($row = mysql_fetch_array($res)){
 	$array_productos[$row['cve']] = $row['descripcion'];
 	$array_modelos[$row['cve']] = $row['modelo'];
@@ -60,7 +60,7 @@ function rowc() {
 if($_POST['cmd']=='imprimir'){
 	include('fpdf153/fpdf.php');
 	include("numlet.php");	
-	$res = mysql_db_query($base,"SELECT * FROM cotizacion WHERE cve='".$_POST['reg']."'");
+	$res = mysql_query("SELECT * FROM cotizacion WHERE cve='".$_POST['reg']."'");
 	$row = mysql_fetch_array($res);
 	$suma=0;
 	class FPDF2 extends PDF_MC_Table {
@@ -92,14 +92,14 @@ CP  03800',0,'C');
 			$this->Ln();		
 		}
 		
-		//Pie de página
+		//Pie de pï¿½gina
 		function Footer(){
-			//Posición: a 1,5 cm del final
+			//Posiciï¿½n: a 1,5 cm del final
 			$this->SetY(-15);
 			//Arial bold 12
 			$this->SetFont('Arial','B',11);
-			//Número de página
-			$this->Cell(0,10,'Página '.$this->PageNo().' de {nb}',0,0,'C');
+			//Nï¿½mero de pï¿½gina
+			$this->Cell(0,10,'Pï¿½gina '.$this->PageNo().' de {nb}',0,0,'C');
 		}
 	}
 	$pdf=new FPDF2('P','mm','LETTER');
@@ -108,7 +108,7 @@ CP  03800',0,'C');
 	$pdf->SetFont('Arial','',9);
 	$pdf->SetWidths(array(100,50,35));
 	$pdf->SetAligns(array('L','L','R'));
-	$res1=mysql_db_query($base,"SELECT * FROM cotizacion_mov WHERE cvecoti='".$_POST['reg']."'") or die(mysql_error());
+	$res1=mysql_query("SELECT * FROM cotizacion_mov WHERE cvecoti='".$_POST['reg']."'") or die(mysql_error());
 	while($row1=mysql_fetch_array($res1)) {
 		$renglon=array();
 		$renglon[]=$array_productos[$row1['cveproducto']];
@@ -125,7 +125,7 @@ CP  03800',0,'C');
 }
 
 if($_POST['ajax']=="traer_archivos"){
-	$res1=mysql_db_query($base,"SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$_POST['cveproducto']."'");
+	$res1=mysql_query("SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$_POST['cveproducto']."'");
 	if(mysql_num_rows($res1)>0){
 		if(mysql_num_rows($res1)==1){
 			echo '1|';
@@ -154,11 +154,11 @@ if($_POST['ajax']=="traer_archivos"){
 $id=0;
 
 if($_POST['cmd']=="cotizar"){
-	mysql_db_query($base,"INSERT cotizacion SET plaza=0,fecha='".date("Y-m-d")."',hora='".date("H:i:s")."',nombre='".$_POST['nombre']."',correo='".$_POST['correo']."',estatus='A',obs='".$_POST['obs']."'");
+	mysql_query("INSERT cotizacion SET plaza=0,fecha='".date("Y-m-d")."',hora='".date("H:i:s")."',nombre='".$_POST['nombre']."',correo='".$_POST['correo']."',estatus='A',obs='".$_POST['obs']."'");
 	$id = mysql_insert_id();
 	foreach($_POST['prod'] as $k=>$v){
 		if($v!="")
-			mysql_db_query($base,"INSERT cotizacion_mov SET plaza=0,cvecoti='$id',cveproducto='$v',cant=1,precio='".$_POST['precio'][$k]."'");
+			mysql_query("INSERT cotizacion_mov SET plaza=0,cvecoti='$id',cveproducto='$v',cant=1,precio='".$_POST['precio'][$k]."'");
 	}	
 	require_once("phpmailer/class.phpmailer.php");
 	$mail = new PHPMailer();
@@ -184,7 +184,7 @@ if($_POST['cmd']=="cotizar"){
 			$html.= '<td align="right">'.number_format($_POST['precio'][$k],2).'</td>';
 			$html.= '</tr>';
 			$suma+=$_POST['precio'][$k];
-			$res1=mysql_db_query($base,"SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$v."'");
+			$res1=mysql_query("SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$v."'");
 			while($row1=mysql_fetch_array($res1)){
 				$dat=explode(".",$row1['archivo']);
 				$extension=end($dat);
@@ -277,14 +277,14 @@ echo '
 		echo '
 		<h2>Cotizacion</h2><br>
 		<table align="center" width="80%">
-		<tr bgcolor="#E9F2F8"><th rowspan="2">Producto</th><th colspan="2">Velocidad impresión (BN/Color)</th><th rowspan="2">(BN/Color)</th><th colspan="4">Funciones</th>
+		<tr bgcolor="#E9F2F8"><th rowspan="2">Producto</th><th colspan="2">Velocidad impresiï¿½n (BN/Color)</th><th rowspan="2">(BN/Color)</th><th colspan="4">Funciones</th>
 		<th rowspan="2">Precio</th>';
 		if($_POST['tipo']>0)
 			echo '<th rowspan="2">Precio Final</th>';
 		echo '
 		<th rowspan="2"><span style="color: blue;cursor: pointer;" onClick="ver_comparar()">Comparar</span></th></tr>
 		<tr bgcolor="#E9F2F8"><th>A4</th><th>A3</th><th>Impresora</th><th>Copiadora</th><th>Escaner</th><th>Fax</th></tr>';
-		$res = mysql_db_query($base,"SELECT * FROM cat_kyocera ORDER BY modelo");
+		$res = mysql_query("SELECT * FROM cat_kyocera ORDER BY modelo");
 		while($row=mysql_fetch_array($res)){
 			rowb();
 			echo '<td><span style="color: blue;cursor: pointer;" onClick="atcr(\'cotizacion.php\',\'\',\'ver_producto\',\''.$row['cve'].'\');">'.$row['modelo'].'</span></td>';
@@ -321,13 +321,13 @@ echo '
 		<h2>'.$array_modelos[$_POST['reg']].'</h2><br><span style="color: blue;cursor: pointer;" onClick="atcr(\'cotizacion.php\',\'\',\'\',\'\');">Volver</span><br><br>
 		<div id="tabs">
 			<ul>
-				<li><a hrer="#tabs-1">Información del producto</a></li>
+				<li><a hrer="#tabs-1">Informaciï¿½n del producto</a></li>
 				<li><a hrer="#tabs-2">Vistas del producto</a></li>
-				<li><a hrer="#tabs-4">Especificación técnica</a></li>
+				<li><a hrer="#tabs-4">Especificaciï¿½n tï¿½cnica</a></li>
 			</ul>
 			<div id="tabs-1">
 			<table width="100%"><tr><td colspan="2"><b>';
-			$res1=mysql_db_query($base,"SELECT * FROM cat_kyocera_especificaciones WHERE cveproducto='".$_POST['reg']."' AND tipo=0");
+			$res1=mysql_query("SELECT * FROM cat_kyocera_especificaciones WHERE cveproducto='".$_POST['reg']."' AND tipo=0");
 			$row1=mysql_fetch_array($res1);
 			echo $row1['texto'];
 			echo '</b><td></tr>';
@@ -336,7 +336,7 @@ echo '
 				echo '<li>'.$row1['texto'].'</li>';
 			}
 			echo '</ul></td><td>';
-			$res = mysql_db_query($base,"SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$_POST['reg']."' AND tipo=1 LIMIT 1");
+			$res = mysql_query("SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$_POST['reg']."' AND tipo=1 LIMIT 1");
 			if($row = mysql_fetch_array($res)){
 				$dat=explode(".",$row['archivo']);
 				$extension=end($dat);
@@ -348,7 +348,7 @@ echo '
 		echo '</div>
 			<div id="tabs-2">
 			<ul id="myGallery">';
-			$res = mysql_db_query($base,"SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$_POST['reg']."' AND tipo=1");
+			$res = mysql_query("SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$_POST['reg']."' AND tipo=1");
 			if($row = mysql_fetch_array($res)){
 				$dat=explode(".",$row['archivo']);
 				$extension=end($dat);
@@ -359,7 +359,7 @@ echo '
 			}	
 		echo '</ul></div>
 			<div id="tabs-4">';
-			$res = mysql_db_query($base,"SELECT * FROM cat_kyocera WHERE cve='".$_POST['reg']."'");
+			$res = mysql_query("SELECT * FROM cat_kyocera WHERE cve='".$_POST['reg']."'");
 			$row = mysql_fetch_array($res);
 			echo '<table>
 			<tr><td class="tableEnc">General</td></tr>
@@ -395,10 +395,10 @@ echo '
 				<tr><td class="tableEnc">Copiar</td></tr>
 				</table><br><table width="100%" border="1">';
 				$rc=TRUE;
-				rowb(); echo '<th align="left" valign="top" width="200">Tamaño máx. de original</th><td>'.$row['copia_tam_max'].'</td></tr>';
+				rowb(); echo '<th align="left" valign="top" width="200">Tamaï¿½o mï¿½x. de original</th><td>'.$row['copia_tam_max'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Funciones de copia digital</th><td>'.$row['copia_func_copia_dig'].'</td></tr>';
-				rowb(); echo '<th align="left" valign="top" width="200">Modo de exposición</th><td>'.$row['copia_modo_exp'].'</td></tr>';
-				rowb(); echo '<th align="left" valign="top" width="200">Porcentajes de ampliación/reducción</th><td>'.$row['copia_porc_amp_redu'].'</td></tr>';
+				rowb(); echo '<th align="left" valign="top" width="200">Modo de exposiciï¿½n</th><td>'.$row['copia_modo_exp'].'</td></tr>';
+				rowb(); echo '<th align="left" valign="top" width="200">Porcentajes de ampliaciï¿½n/reducciï¿½n</th><td>'.$row['copia_porc_amp_redu'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Zoom</th><td>'.$row['copia_zoom'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Copia continua</th><td>'.$row['copia_copia_continua'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Capacidad de memoria</th><td>'.$row['copia_capacidad_memoria'].'</td></tr>';
@@ -414,9 +414,9 @@ echo '
 				rowb(); echo '<th align="left" valign="top" width="200">Software incluido</th><td>'.$row['scan_software'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Tipo de archivo</th><td>'.$row['scan_tipo_arch'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Reconocimiento de originales</th><td>'.$row['scan_reconocimiento_ori'].'</td></tr>';
-				rowb(); echo '<th align="left" valign="top" width="200">Tamaño máx. de escaneo</th><td>'.$row['scan_tamano_max'].'</td></tr>';
+				rowb(); echo '<th align="left" valign="top" width="200">Tamaï¿½o mï¿½x. de escaneo</th><td>'.$row['scan_tamano_max'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Funcionalidad</th><td>'.$row['scan_funcionalidad'].'</td></tr>';
-				rowb(); echo '<th align="left" valign="top" width="200">Resolución de escaneo</th><td>'.$row['scan_resolucion'].'</td></tr>';
+				rowb(); echo '<th align="left" valign="top" width="200">Resoluciï¿½n de escaneo</th><td>'.$row['scan_resolucion'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Velocidad de escaneo</th><td>'.$row['scan_velocidad'].'</td></tr>';
 				echo '</table>';
 			}
@@ -430,8 +430,8 @@ echo '
 				rowb(); echo '<th align="left" valign="top" width="200">Velocidad de escaneo</th><td>'.$row['fax_velocidad_escaneo'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Velocidad de transmision</th><td>'.$row['fax_velocidad_transmision'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Densidad de escaneo</th><td>'.$row['fax_densidad_escaneo'].'</td></tr>';
-				rowb(); echo '<th align="left" valign="top" width="200">Tamaño máx. de original</th><td>'.$row['fax_tam_original'].'</td></tr>';
-				rowb(); echo '<th align="left" valign="top" width="200">Método de compresión</th><td>'.$row['fax_metodo_compresion'].'</td></tr>';
+				rowb(); echo '<th align="left" valign="top" width="200">Tamaï¿½o mï¿½x. de original</th><td>'.$row['fax_tam_original'].'</td></tr>';
+				rowb(); echo '<th align="left" valign="top" width="200">Mï¿½todo de compresiï¿½n</th><td>'.$row['fax_metodo_compresion'].'</td></tr>';
 				rowb(); echo '<th align="left" valign="top" width="200">Funciones de fax</th><td>'.$row['fax_funciones'].'</td></tr>';
 				echo '</table>';
 			}

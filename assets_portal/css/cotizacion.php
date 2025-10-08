@@ -2,7 +2,7 @@
 require_once('subs/cnx_db.php');
 global $base,$PHP_SELF;
 
-$res = mysql_db_query($base,"SELECT * FROM cat_kyocera ORDER BY descripcion,modelo");
+$res = mysql_query("SELECT * FROM cat_kyocera ORDER BY descripcion,modelo");
 while($row = mysql_fetch_array($res)){
 	$array_productos[$row['cve']] = $row['descripcion'];
 	$array_modelos[$row['cve']] = $row['modelo'];
@@ -10,7 +10,7 @@ while($row = mysql_fetch_array($res)){
 }
 
 if($_POST['ajax']=="traer_archivos"){
-	$res1=mysql_db_query($base,"SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$_POST['cveproducto']."'");
+	$res1=mysql_query("SELECT * FROM cat_kyocera_archivos WHERE cveproducto='".$_POST['cveproducto']."'");
 	if(mysql_num_rows($res1)>0){
 		if(mysql_num_rows($res1)==1){
 			echo '1|';
