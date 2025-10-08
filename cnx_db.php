@@ -27,7 +27,7 @@ $mins -= $hrs*60;
 $offset = sprintf('%+d:%02d', $hrs*$sgn, $mins);
 mysql_query("SET time_zone='$offset'");*/
 GLOBAL $mysqli;
-$mysqli = new mysqli('mysql', 'bj88', 'skYYoung73', 'bj88');
+$mysqli = new mysqli('localhost', 'bj88', 'skYYoung73', 'bj88');
 
 function mysql_query($query){
    GLOBAL $mysqli;
