@@ -2,7 +2,7 @@
 error_reporting(E_ERROR | E_PARSE);
 //$zona_horaria = file_get_contents('https://pendientes.hgaribay.com/zonahoraria.txt');
 //date_default_timezone_set ($zona_horaria);
-if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
+/*if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
    $t=time();
    while (time()<$t+5) {}
    if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
@@ -16,7 +16,7 @@ if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
    }
 }
 
-/*$base='bj88';
+$base='bj88';
 mysql_select_db($base);
 $now = new DateTime();
 $mins = $now->getOffset()/60;
