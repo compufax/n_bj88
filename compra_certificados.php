@@ -427,7 +427,7 @@ if($_POST['cmd']==10){
 		$where .= " AND a.engomado = '{$_POST['busquedatipocertificado']}'";
 	}
 
-	if(is_array($_POST['busquedaanio']) && count($_POST['busquedaanio']>0)){
+	if(is_array($_POST['busquedaanio']) && count($_POST['busquedaanio'])>0){
 		$busquedaanio = implode(',', $_POST['busquedaanio']);
 		$where .= " AND a.anio IN ({$busquedaanio})";
 	}
