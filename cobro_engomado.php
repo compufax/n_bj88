@@ -2039,7 +2039,7 @@ if($_POST['cmd']==101){
 	if($row['tipo_venta']==1){
 		$texto.='USTED POR ESTE TICKS NO PAGO||Y  NO SE PODRA FACTURAR||SI LE COBRARON FAVOR DE REPORTAR||AL GERENTE DEL CENTRO|';
 	}
-	$resPlaza = mysql_query("SELECT numero,nombre,bloqueada_sat,domicilioticket FROM plazas WHERE cve='{$row['plaza']}'");
+	$resPlaza = mysql_query("SELECT numero,nombre,bloqueada_sat FROM plazas WHERE cve='{$row['plaza']}'");
 	$rowPlaza = mysql_fetch_array($resPlaza);
 	$resPlaza2 = mysql_query("SELECT rfc FROM datosempresas WHERE plaza='{$row['plaza']}'");
 	$rowPlaza2 = mysql_fetch_array($resPlaza2);
@@ -2500,7 +2500,7 @@ if($_POST['cmd']==103){
 	echo '<tr><td>DEVOLUCIONES</td><td align="right">'.number_format($devolucion['cant'],0).'</td><td align="right">'.number_format($devolucion['imp'],2).'</td></tr>';
 	$gtotales-=$devolucion['imp'];
 	$adepositar-=$devolucion['imp'];
-	$res = mysql_query("SELECT b.cve, b.nombre, COUNT(a.cve) as reg, SUM(a.monto) as monto FROM recibos_salida a INNER JOIN motivos b ON b.cve = a.motivo WHERE a.plaza={$_POST['plazausuario']} AND a.fecha_aplicacion BETWEEN '{$_POST['fecha_ini']}' AND '{$_POST['fecha_fin']}' AND a.estatus!='C' {$filtro} GROUP BY b.cve");
+	$res = mysql_query("SELECT b.cve, b.nombre, COUNT(a.cve) as reg, SUM(a.monto) as monto FROM recibos_salida a INNER JOIN motivos b ON b.cve = a.motivo WHERE a.plaza={$_POST['plazausuario']} AND a.fecha BETWEEN '{$_POST['fecha_ini']}' AND '{$_POST['fecha_fin']}' AND a.estatus!='C' {$filtro} GROUP BY b.cve");
 	$totales=array(0,0);
 	while($row = mysql_fetch_array($res)){
 		echo '<tr>';
