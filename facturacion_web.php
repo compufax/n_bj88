@@ -1097,10 +1097,10 @@ if($_POST['cmd']==2){
 			$documento['metodopago']=$array_tipo_pagosat[$tipo_pago];
 			$res = mysql_query("SELECT * FROM clientes WHERE cve='".$cliente_id."'");
 			$row = mysql_fetch_array($res);
-			if($_POST['tipo_pago']==2 || $_POST['tipo_pago']==5)
+			/*if($_POST['tipo_pago']==2 || $_POST['tipo_pago']==5)
 			$res2=mysql_query("SELECT * FROM clientes_cuentas WHERE cliente='".$row['cve']."' AND cuenta!=''");
 			if($row2=mysql_fetch_array($res2))
-				$documento['numerocuentapago']=$row2['cuenta'];
+				$documento['numerocuentapago']=$row2['cuenta'];*/
 			$emailenvio = $row['email'];
 			$row['cve']=0;
 			$documento['receptor']['codigo']=$row['cve'];
