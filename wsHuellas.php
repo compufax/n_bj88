@@ -561,7 +561,7 @@ function RegistraChecada($usuario, $password, $lector, $operador, $tipo = 0)
 function ConectarDB()
 {
 	$msg="OK";
-	if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
+	/*if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
 	   $t=time();
 	   while (time()<$t+5) {}
 	   if (!$MySQL=@mysql_connect('mysql', 'bj88', 'skYYoung73')) {
@@ -576,14 +576,14 @@ function ConectarDB()
 	}
 
 	$base='bj88';
-	mysql_select_db($base);
+	mysql_select_db($base);*/
 	//mysql_query("SET time_zone = CST6CDT;");
 	return $msg;
 }
 // Get our posted data if the service is being consumed
 // otherwise leave this data blank.                
-$POST_DATA = isset($GLOBALS['HTTP_RAW_POST_DATA']) 
-? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
+$POST_DATA = (file_get_contents('php://input') != '') 
+? file_get_contents('php://input') : '';
 
 // pass our posted data (or nothing) to the soap service                    
 $server->service($POST_DATA);
