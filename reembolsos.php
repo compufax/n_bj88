@@ -93,7 +93,7 @@ if($_POST['cmd']==0){
 <script>
 	var tablalistado = $('#dataTable').DataTable( {
         "ajax": {
-        	url: 'pagos_caja.php',
+        	url: 'reembolsos.php',
         	type: "POST",
         	"data": {
         		"cmd": 10,
