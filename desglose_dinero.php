@@ -163,7 +163,7 @@ if($_POST['cmd']==0){
         "processing": true,
         "serverSide": true,
         "bFilter": false,
-        "order": [[0, "DESC"]],
+        "order": [[1, "DESC"]],
         "columnDefs": [
         	{ className: "dt-head-center dt-body-right", "targets": 0 },
         	{ className: "dt-head-center dt-body-center", "targets": 1 },
@@ -224,7 +224,7 @@ if($_POST['cmd']==10){
 	}
 
 	if($orderby == ""){
-		$orderby = " ORDER BY a.folio DESC";
+		$orderby = " ORDER BY CONCAT(a.fecha,' ',a.hora) DESC";
 	}
 	else{
 		$orderby = " ORDER BY ".substr($orderby, 1);
@@ -255,7 +255,6 @@ if($_POST['cmd']==10){
 		'recordsFiltered'=> $registros['registros'],
 		'monto' => $registros['monto']
 	);
-	echo "SELECT a.cve, a.folio, CONCAT(a.fecha,' ',a.hora) as fechahora, b.usuario as nomusuario, IF(a.estatus!='C',a.monto,0) as monto, a.estatus, a.obs FROM desglose_dinero a INNER JOIN usuarios b ON b.cve = a.usuario{$where}{$orderby} LIMIT {$_POST['start']},{$_POST['length']}";
 	$res = mysql_query("SELECT a.cve, a.folio, CONCAT(a.fecha,' ',a.hora) as fechahora, b.usuario as nomusuario, IF(a.estatus!='C',a.monto,0) as monto, a.estatus, a.obs FROM desglose_dinero a INNER JOIN usuarios b ON b.cve = a.usuario{$where}{$orderby} LIMIT {$_POST['start']},{$_POST['length']}");
 	$tmonto = 0;
 	$nivelUsuario = nivelUsuario();
