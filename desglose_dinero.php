@@ -255,6 +255,7 @@ if($_POST['cmd']==10){
 		'recordsFiltered'=> $registros['registros'],
 		'monto' => $registros['monto']
 	);
+	echo "SELECT a.cve, a.folio, CONCAT(a.fecha,' ',a.hora) as fechahora, b.usuario as nomusuario, IF(a.estatus!='C',a.monto,0) as monto, a.estatus, a.obs FROM desglose_dinero a INNER JOIN usuarios b ON b.cve = a.usuario{$where}{$orderby} LIMIT {$_POST['start']},{$_POST['length']}";
 	$res = mysql_query("SELECT a.cve, a.folio, CONCAT(a.fecha,' ',a.hora) as fechahora, b.usuario as nomusuario, IF(a.estatus!='C',a.monto,0) as monto, a.estatus, a.obs FROM desglose_dinero a INNER JOIN usuarios b ON b.cve = a.usuario{$where}{$orderby} LIMIT {$_POST['start']},{$_POST['length']}");
 	$tmonto = 0;
 	$nivelUsuario = nivelUsuario();
