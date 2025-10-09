@@ -1152,6 +1152,7 @@ if($_POST['cmd']==10){
 
 		if($_POST['busquedausuario']!=''){
 			$where .= " AND a.usuario = '{$_POST['busquedausuario']}'";
+			$where1 .= " AND a.usuario = '{$_POST['busquedausuario']}'";
 		}
 
 		if($_POST['busquedatipoventa']!=''){
@@ -1165,21 +1166,21 @@ if($_POST['cmd']==10){
 		}
 	}
 
-	$row1 = mysql_fetch_assoc(mysql_query("SELECT COUNT(a.cve) as registros, SUM(IF(a.estatus='A',1,0)) as activos,SUM(IF(a.estatus='C',1,0)) as cancelados,SUM(IF(a.estatus='A' AND a.tipo_venta=0 AND a.tipo_pago=1,a.monto,0)) as efectivo, SUM(IF(a.estatus='A' AND ISNULL(b.cve),1,0)) as sin_entrega FROM cobro_engomado a LEFT JOIN certificados b ON a.plaza = b.plaza AND a.cve = b.ticket AND b.estatus!='C'{$where}"));
+	$row1 = mysql_fetch_assoc(mysql_query("SELECT COUNT(a.cve) as registros, SUM(IF(a.estatus='A',1,0)) as activos,SUM(IF(a.estatus='C',1,0)) as cancelados,SUM(IF(a.estatus='A' AND a.tipo_venta=0 AND a.tipo_pago=1,a.monto,0)) as efectivo, SUM(IF(a.estatus='A' AND ISNULL(b.cve),1,0)) as sin_entrega FROM cobro_engomado a LEFT JOIN certificados b ON a.plaza = b.plaza AND a.cve = b.ticket AND b.estatus!='C'{$where1}"));
 	$efectivo = $row1['efectivo'];
 	$total_registros = $row1['registros'];
 	$activos = $row1['activos'];
 	$cancelados = $row1['cancelados'];
 	$sin_entrega = $row1['sin_entrega'];
-	$row1 = mysql_fetch_assoc(mysql_query("SELECT SUM(a.monto) as importe FROM pagos_caja a{$where} AND a.estatus!='C' AND a.forma_pago=1"));
+	$row1 = mysql_fetch_assoc(mysql_query("SELECT SUM(a.monto) as importe FROM pagos_caja a{$where1} AND a.estatus!='C' AND a.forma_pago=1"));
 	$efectivo+=$row1['importe'];
 
-	$row1 = mysql_fetch_assoc(mysql_query("SELECT SUM(a.devolucion) as importe FROM devolucion_certificado a{$where} AND a.estatus!='C'"));
+	$row1 = mysql_fetch_assoc(mysql_query("SELECT SUM(a.devolucion) as importe FROM devolucion_certificado a{$where1} AND a.estatus!='C'"));
 	$efectivo-=$row1['importe'];
-	$row1 = mysql_fetch_assoc(mysql_query("SELECT SUM(a.monto) as importe FROM desglose_dinero a{$where} AND a.estatus!='C'"));
+	$row1 = mysql_fetch_assoc(mysql_query("SELECT SUM(a.monto) as importe FROM desglose_dinero a{$where1} AND a.estatus!='C'"));
 	$efectivo-=$row1['importe'];
 
-	$res = mysql_query("SELECT COUNT(a.cve) as registros, SUM(IF(a.estatus!='C'{$condicionmontocopias}, a.monto, 0)) as monto, SUM(IF(a.estatus!='C'{$condicionmontocopias}, a.copias*a.costo_copias, 0)) as copias FROM cobro_engomado a {$where}");
+	$res = mysql_query("SELECT COUNT(a.cve) as registros, SUM(IF(a.estatus!='C'{$condicionmontocopias}, a.monto, 0)) as monto, SUM(IF(a.estatus!='C'{$condicionmontocopias}, a.copias*a.costo_copias, 0)) as copias FROM cobro_engomado a {$where1}");
 	$registros = mysql_fetch_assoc($res);
 	$resultado = array(
 		'data' => array(),
