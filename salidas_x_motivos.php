@@ -5,7 +5,7 @@ require_once('globales.php');
 
 function obtener_informacion($datos){
 	$resultado = array();
-	$res = mysql_query("SELECT b.cve, b.nombre, a.importe FROM (SELECT motivo, SUM(monto) as importe FROM recibo_salida WHERE plaza='{$datos['cveplaza']}' AND estatus!='C' AND fecha BEWTEEN '{$datos['busquedafechaini']}' AND '{$datos['busquedafechafin']}' GROUP BY motivo) a INNER JOIN motivos b ON b.cve = a.motivo ORDER BY b.nombre");
+	$res = mysql_query("SELECT b.cve, b.nombre, a.importe FROM (SELECT motivo, SUM(monto) as importe FROM recibo_salida WHERE plaza='{$datos['cveplaza']}' AND estatus!='C' AND fecha BETWEEN '{$datos['busquedafechaini']}' AND '{$datos['busquedafechafin']}' GROUP BY motivo) a INNER JOIN motivos b ON b.cve = a.motivo ORDER BY b.nombre");
 	while($row=mysql_fetch_array($res)){
 		$resultado[] = $row;
 	}
