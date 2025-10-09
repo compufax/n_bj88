@@ -1,6 +1,6 @@
 <?php
 $NOMBRE = "Verificacion BJ88";
-$array_nosi = ['No', 'Sí'];
+$array_nosi = ['No', 'Sï¿½'];
 $usuarios_root = array(1, 10, 14);
 
 $array_modulos = array(
@@ -177,10 +177,10 @@ function getRealIP()
                :
                "unknown" );
 
-      // los proxys van añadiendo al final de esta cabecera
+      // los proxys van aï¿½adiendo al final de esta cabecera
       // las direcciones ip que van "ocultando". Para localizar la ip real
       // del usuario se comienza a mirar por el principio hasta encontrar
-      // una dirección ip que no sea del rango privado. En caso de no
+      // una direcciï¿½n ip que no sea del rango privado. En caso de no
       // encontrarse ninguna se toma como valor el REMOTE_ADDR
 
       $entries = preg_split('[, ]', $_SERVER['HTTP_X_FORWARDED_FOR']);
