@@ -320,7 +320,7 @@ if($_POST['cmd']==10){
 	FROM copias_simple a 
 	INNER JOIN depositantes b ON b.cve = a.depositante 
 	INNER JOIN formas_pago c ON c.cve = a.forma_pago 
-	INNER JOIN usuarios d ON f.cve = d.usuario 
+	INNER JOIN usuarios d ON d.cve = a.usuario 
 	{$where}{$orderby} LIMIT {$_POST['start']},{$_POST['length']}");
 	$tmonto = 0;
 	$nivelUsuario = nivelUsuario();
