@@ -24,7 +24,7 @@ function top() {
 	}
 
 	//$url=split("/",$PHP_SELF);
-	$url=split("/",$_SERVER["PHP_SELF"]);
+	$url=explode("/",$_SERVER["PHP_SELF"]);
 	$url=array_reverse($url);
     ?>
 	
