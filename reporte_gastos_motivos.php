@@ -5,7 +5,7 @@ require_once('globales.php');
 
 function obtener_informacion($datos){
 	$resultado = array();
-	$res = mysql_query("SELECT plaza, motivo, SUM(monto) as importe FROM recibo_salida WHERE estatus!='C' AND fecha BEWTEEN '{$datos['busquedafechaini']}' AND '{$datos['busquedafechafin']}' GROUP BY plaza, motivo");
+	$res = mysql_query("SELECT plaza, motivo, SUM(monto) as importe FROM recibo_salida WHERE estatus!='C' AND fecha BETWEEN '{$datos['busquedafechaini']}' AND '{$datos['busquedafechafin']}' GROUP BY plaza, motivo");
 	while($row=mysql_fetch_array($res)){
 		$resultado[$row['plaza']][$row['motivo']] = $row['importe'];
 	}
