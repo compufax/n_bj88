@@ -48,10 +48,10 @@ function obtener_informacion($datos){
 		$resultados[$row['fecha']]['salidas']=$row['gastos'];
 	}
 
-	$res=mysql_query("SELECT fecha, SUM(monto) as gastos FROM venta_servicios WHERE plaza='{$datos['cveplaza']}' AND fecha BETWEEN '{$datos['busquedafechaini']}' AND '{$datos['busquedafechafin']}'AND estatus='A' GROUP BY fecha");
+	/*$res=mysql_query("SELECT fecha, SUM(monto) as gastos FROM venta_servicios WHERE plaza='{$datos['cveplaza']}' AND fecha BETWEEN '{$datos['busquedafechaini']}' AND '{$datos['busquedafechafin']}'AND estatus='A' GROUP BY fecha");
 	while($row=mysql_fetch_array($res)){
 		$resultados[$row['fecha']]['servicios']=$row['gastos'];
-	}
+	}*/
 	return $resultados;
 }
 
