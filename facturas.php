@@ -1130,7 +1130,7 @@ if($_POST['cmd']==1){
 						<label for="forma_pago">Forma de Pago</label>
 			            <select id="forma_pago" name="forma_pago" class="form-control">
 			            <option value="0">Pago en una sola exhibici&oacute;n</option>
-			            <option value="1"<?php if($Factura['forma_pago']==1){?> selected<? }?>>Pago en parcialidades o diferidos</option>
+			            <option value="1"<?php if($Factura['forma_pago']==1){?> selected<?php }?>>Pago en parcialidades o diferidos</option>
 			        	</select>
 			        </div>
 			        <div class="form-group col-sm-3">
@@ -1150,7 +1150,7 @@ if($_POST['cmd']==1){
 						<label for="condiciones_pago">Condiciones de Pago</label>
 			            <select id="condiciones_pago" name="condiciones_pago" class="form-control">
 			            <option value="0">Contado</option>
-			            <option value="1"<?php if($Factura['condiciones_pago']==1){?> selected<? }?>>Credito</option>
+			            <option value="1"<?php if($Factura['condiciones_pago']==1){?> selected<?php }?>>Credito</option>
 			        	</select>
 			        </div>
 			    </div>
@@ -1158,9 +1158,9 @@ if($_POST['cmd']==1){
 			    	<div class="form-group col-sm-2">
 						<label for="tipo_documento_origen">Tipo Origen</label>
 			            <select id="tipo_documento_origen" name="tipo_documento_origen" class="form-control" onChange="mostrar_folios(true)">
-			            <option value="0"<?php if($Factura['tipo_documento_origen']==0 && $_POST['reg']>0){?> selected<? }?>>Ninguno</option>
-			            <option value="1" <?php if($Factura['tipo_documento_origen']==1 || $_POST['reg']==0){?> selected<? }?>>Tickets</option>
-			            <option value="2"<?php if($Factura['tipo_documento_origen']==2){?> selected<? }?>>Pagos caja</option>
+			            <option value="0"<?php if($Factura['tipo_documento_origen']==0 && $_POST['reg']>0){?> selected<?php }?>>Ninguno</option>
+			            <option value="1" <?php if($Factura['tipo_documento_origen']==1 || $_POST['reg']==0){?> selected<?php }?>>Tickets</option>
+			            <option value="2"<?php if($Factura['tipo_documento_origen']==2){?> selected<?php }?>>Pagos caja</option>
 			        	</select>
 			        </div>
 			        <?php 
@@ -1214,15 +1214,15 @@ if($_POST['cmd']==1){
 			    <div class="form-row">
 					<div class="form-group col-sm-3">
 						<label for="subtotal">Subtotal</label>
-			            <input type="number" class="form-control" id="subtotal" name="subtotal" placeholder="Subtotal" value="<?php $Factura['subtotal'];?>" readOnly>
+			            <input type="number" class="form-control" id="subtotal" name="subtotal" placeholder="Subtotal" value="<?php echo $Factura['subtotal'];?>" readOnly>
 			        </div>
 			        <div class="form-group col-sm-3">
 						<label for="sucursal">IVA</label>
-			            <input type="iva" class="form-control" id="iva" name="iva" placeholder="IVA" value="<?php $Factura['iva'];?>" readOnly>
+			            <input type="iva" class="form-control" id="iva" name="iva" placeholder="IVA" value="<?php echo $Factura['iva'];?>" readOnly>
 			        </div>
 			        <div class="form-group col-sm-3">
 						<label for="total">Total</label>
-			            <input type="number" class="form-control" id="total" name="total" placeholder="Total" value="<?php $Factura['total'];?>" readOnly>
+			            <input type="number" class="form-control" id="total" name="total" placeholder="Total" value="<?php echo $Factura['total'];?>" readOnly>
 			        </div>
 			    </div>
 		    </div>
@@ -1450,16 +1450,17 @@ if($_POST['cmd']==11){
 </script>
 <?php
 }
+
 if($_POST['cmd']==115) {
-		header('Content-type: application/vnd.ms-excel');
-header("Content-Disposition: attachment; filename=Facturas.xls");
-header("Pragma: no-cache");
-header("Expires: 0");
-		$resplaza = mysql_query("SELECT * FROM plazas WHERE cve='".$_POST['cveplaza']."'");
+	header('Content-type: application/vnd.ms-excel');
+	header("Content-Disposition: attachment; filename=Facturas.xls");
+	header("Pragma: no-cache");
+	header("Expires: 0");
+	$resplaza = mysql_query("SELECT * FROM plazas WHERE cve='".$_POST['cveplaza']."'");
 	$rowplaza = mysql_fetch_array($resplaza);
 	
 
-$html= '<table width="100%" border="0" cellpadding="4" cellspacing="1"  id="tabla1" >';
+	$html= '<table width="100%" border="0" cellpadding="4" cellspacing="1"  id="tabla1" >';
 	$html.= '<tr style="font-size:28px"><td align="center" colspan="12">Verificentros Plaza '.$rowplaza['numero'].'</td></tr><tr>
 			<td align="center" style="font-size:24px" colspan="12">Desglose de Venta por Periodo: '.$_POST['busquedafechaini'].' al '.$_POST['busquedafechafin'].'</td>
 		 </tr>
@@ -1487,7 +1488,7 @@ $html= '<table width="100%" border="0" cellpadding="4" cellspacing="1"  id="tabl
 				<th>Usuario</th>
 			</tr>
 		</thead>';
-$columnas=array('', '', "CONCAT(a.folio, ' ', a.serie)", "CONCAT(a.fecha, ' ', a.hora)", 'a.tipo_pag', "b.nombre", "b.rfc", 'c.nombre', "IF(a.estatus='C', 0, a.total)", "IF(a.estatus='C', 'Cancelado', IF(a.respuesta1='', 'Pendiente de Timbrar', 'Timbrado'))");
+	$columnas=array('', '', "CONCAT(a.folio, ' ', a.serie)", "CONCAT(a.fecha, ' ', a.hora)", 'a.tipo_pag', "b.nombre", "b.rfc", 'c.nombre', "IF(a.estatus='C', 0, a.total)", "IF(a.estatus='C', 'Cancelado', IF(a.respuesta1='', 'Pendiente de Timbrar', 'Timbrado'))");
 
 	$orderby = "";
 	foreach($_POST['order'] as $dato){
@@ -1609,7 +1610,7 @@ $columnas=array('', '', "CONCAT(a.folio, ' ', a.serie)", "CONCAT(a.fecha, ' ', a
 		
 	}
 	$html.='</table>
-</div>';
+	</div>';
 	//echo json_encode($resultado);
 	
 	echo $html;
@@ -1739,10 +1740,10 @@ if($_POST['cmd']==2){
 			if($row['folio_inicial']<$row1[0]){
 				$row['folio_inicial'] = $row1[0];
 			}
-			$insert = "INSERT facturas SET plaza='{$_POST['cveplaza']}', serie='{$row['serie']}', folio='{$row['folio_inicial']}', fecha=CURDATE(), fecha_creacion=CURDATE(), hora=CURTIME(), obs='".addslashes($_POST['obs'])."', cliente='{$_POST['cliente']}', tipo_pago='{$_POST['tipo_pago']}', forma_pago='{$_POST['forma_pago']}', usuario='{$_POST['cveusuario']}', tipo_serie='".$_POST['tipo_serie']."', tipo_relacion='{$_POST['tipo_relacion']}', uuidsrelacionados='{$_POST['uuidsrelacionados']}', tipo_documento_origen='{$_POST['tipo_documento_origen']}', sin_timbrar='{$_POST['sin_timbrar']}', condiciones_pago='{$_POST['condiciones_pago]']}'";
+			$insert = "INSERT facturas SET plaza='{$_POST['cveplaza']}', serie='{$row['serie']}', folio='{$row['folio_inicial']}', fecha=CURDATE(), fecha_creacion=CURDATE(), hora=CURTIME(), obs='".addslashes($_POST['obs'])."', cliente='{$_POST['cliente']}', tipo_pago='{$_POST['tipo_pago']}', forma_pago='{$_POST['forma_pago']}', usuario='{$_POST['cveusuario']}', tipo_serie='".$_POST['tipo_serie']."', tipo_relacion='{$_POST['tipo_relacion']}', uuidsrelacionados='{$_POST['uuidsrelacionados']}', tipo_documento_origen='{$_POST['tipo_documento_origen']}', sin_timbrar='{$_POST['sin_timbrar']}', condiciones_pago='{$_POST['condiciones_pago']}'";
 			while(!$resinsert=mysql_query($insert)){
 				$row['folio_inicial']++;
-				$insert = "INSERT facturas SET plaza='{$_POST['cveplaza']}', serie='{$row['serie']}', folio='{$row['folio_inicial']}', fecha=CURDATE(), fecha_creacion=CURDATE(), hora=CURTIME(), obs='".addslashes($_POST['obs'])."', cliente='{$_POST['cliente']}', tipo_pago='{$_POST['tipo_pago']}', forma_pago='{$_POST['forma_pago']}', usuario='{$_POST['cveusuario']}', tipo_serie='".$_POST['tipo_serie']."', tipo_relacion='{$_POST['tipo_relacion']}', uuidsrelacionados='{$_POST['uuidsrelacionados']}', tipo_documento_origen='{$_POST['tipo_documento_origen']}', sin_timbrar='{$_POST['sin_timbrar']}', condiciones_pago='{$_POST['condiciones_pago]']}'";
+				$insert = "INSERT facturas SET plaza='{$_POST['cveplaza']}', serie='{$row['serie']}', folio='{$row['folio_inicial']}', fecha=CURDATE(), fecha_creacion=CURDATE(), hora=CURTIME(), obs='".addslashes($_POST['obs'])."', cliente='{$_POST['cliente']}', tipo_pago='{$_POST['tipo_pago']}', forma_pago='{$_POST['forma_pago']}', usuario='{$_POST['cveusuario']}', tipo_serie='".$_POST['tipo_serie']."', tipo_relacion='{$_POST['tipo_relacion']}', uuidsrelacionados='{$_POST['uuidsrelacionados']}', tipo_documento_origen='{$_POST['tipo_documento_origen']}', sin_timbrar='{$_POST['sin_timbrar']}', condiciones_pago='{$_POST['condiciones_pago']}'";
 			}
 			
 			$cvefact=mysql_insert_id();
