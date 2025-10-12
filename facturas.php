@@ -1,6 +1,32 @@
 <?php
 require_once('cnx_db.php');
 require_once('globales.php'); 
+if($_POST['cmd']==101){
+	$res = mysql_query("SELECT a.cve, a.estatus, a.respuesta1, a.serie, a.folio, b.nombre FROM facturas a INNER JOIN plazas b ON b.cve = a.plaza INNER JOIN clientes c ON c.cve = a.cliente WHERE a.plaza={$_POST['cveplaza']} AND a.cve={$_POST['reg']}");
+	$row = mysql_fetch_assoc(($res));
+	// Ruta del archivo XML en el servidor
+	$archivo = "cfdi/comprobantes/cfdi_{$_POST['cveplaza']}_{$_POST['reg']}.xml";
+	$nombre_archivo = "{$row['nombre']} {$row['serie']} {$row['folio']}.xml";
+
+	// Verificar que exista
+	if (!file_exists($archivo)) {
+	    die("El archivo {$archivo} no existe.");
+	}
+
+	// Cabeceras para forzar descarga
+	header('Content-Description: File Transfer');
+	header('Content-Type: application/xml');
+	header('Content-Disposition: attachment; filename="' . $nombre_archivo . '"');
+	header('Expires: 0');
+	header('Cache-Control: must-revalidate');
+	header('Pragma: public');
+	header('Content-Length: ' . filesize($archivo));
+
+	// Enviar contenido
+	readfile($archivo);
+	exit();
+}
+
 if($_POST['cmd']==100){
 	include("imp_factura.php");
 	generaFacturaPdf($_POST['cveplaza'], $_POST['reg'],1);
@@ -1530,7 +1556,7 @@ $columnas=array('', '', "CONCAT(a.folio, ' ', a.serie)", "CONCAT(a.fecha, ' ', a
 			$chk = '';
 		}
 		if($row['respuesta1'] != ''){
-			$extras .= '&nbsp;<i class="fas fa-file-code fa-sm fa-fw mr-2 text-primary" style="cursor:pointer;" onClick="atcr(\'cfdi/comprobantes/cfdi_'.$row['plaza'].'_'.$row['cve'].'.xml\',\'_blank\',\'\','.$row['cve'].')" title="XML"></i>
+			$extras .= '&nbsp;<i class="fas fa-file-code fa-sm fa-fw mr-2 text-primary" style="cursor:pointer;" onClick="atcr(\'facturas.php\',\'_blank\',101,'.$row['cve'].')" title="XML"></i>
 			&nbsp;&nbsp;<i class="fas fa-mail-bulk fa-sm fa-fw mr-2 text-primary" style="cursor:pointer;" onClick="reenviarcorreo('.$row['cve'].')" title="Reenviar Correo"></i>';
 		}
 		if($row['estatus'] != 'C' && $nivelUsuario>2){

@@ -92,7 +92,7 @@ if($_POST['cmd']==10){
 	<?php
 		$totales = array();
 
-		$res1 = mysql_query("SELECT cve, numero, nombre FROM plazas ORDER BY lista");
+		$res1 = mysql_query("SELECT cve, numero, nombre FROM plazas WHERE estatus!='I' ORDER BY lista");
 	    while($row1 = mysql_fetch_assoc($res1)){
 	?>
 	    <tr>

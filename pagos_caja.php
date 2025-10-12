@@ -105,7 +105,7 @@ if($_GET['cmd']==101){
 	exit();
 }
 
-if($_POST['ajax']==34){
+if($_POST['cmd']==34){
 	$resultado = array('mensaje' => '', 'error'=>0);
 	$res = mysql_query("SELECT factura, tipo_pago FROM pagos_caja WHERE plaza='{$_POST['cveplaza']}' AND cve='{$_POST['venta']}'");
 	$row = mysql_fetch_array($res);
@@ -114,8 +114,9 @@ if($_POST['ajax']==34){
 		$resultado['error'] = 1;
 	}
 	elseif($row['tipo_pago']==6) {
-		$res1=mysql_query("SELECT COUNT(a.cve) FROM vales_pago_anticipado a INNER JOIN cobro_engomado b ON a.plaza = b.plaza AND b.estatus!='C' AND ((a.cve = b.vale_pago_anticipado AND a.tipo=0 AND b.tipo_venta=0 AND b.tipo_pago = 6) OR (a.cve = b.codigo_cortesia AND a.tipo=1 AND b.tipo_venta=2 AND b.tipo_cortesia=2)) WHERE a.plaza='{$row['cveplaza']}' AND a.pago = '{$_POST['venta']}'");
-		if($row1=mysql_fetch_array($res1)){
+		$res1=mysql_query("SELECT COUNT(a.cve) as cantidad FROM vales_pago_anticipado a INNER JOIN cobro_engomado b ON a.plaza = b.plaza AND b.estatus!='C' AND ((a.cve = b.vale_pago_anticipado AND a.tipo=0 AND b.tipo_venta=0 AND b.tipo_pago = 6) OR (a.cve = b.codigo_cortesia AND a.tipo=1 AND b.tipo_venta=2 AND b.tipo_cortesia=2)) WHERE a.plaza='{$row['cveplaza']}' AND a.pago = '{$_POST['venta']}'");
+		$row1 = mysql_fetch_assoc($res1);
+		if($row1['cantidad'] > 0){
 			$resultado['mensaje'] = 'La venta ya tiene vales utilizados';
 			$resultado['error'] = 1;
 		}
@@ -375,7 +376,7 @@ if($_POST['cmd']==0){
 	function precancelarventa(venta){
 		waitingDialog.show();
 		$.ajax({
-			url: 'cobro_engomado.php',
+			url: 'pagos_caja.php',
 			type: "POST",
 			dataType: 'json',
 			data: {

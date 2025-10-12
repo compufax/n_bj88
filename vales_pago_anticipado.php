@@ -10,7 +10,7 @@ function obtener_informacion($datos){
 	}
 	$select .= " FROM vales_pago_anticipado a";
 	if($datos['mostrar']<2){
-		if($datos['mostrar']==0){
+		if($datos['mostrar']!=1){
 			$select .= " LEFT";
 		}
 		else{

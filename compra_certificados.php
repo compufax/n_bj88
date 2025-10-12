@@ -615,7 +615,7 @@ if($_POST['cmd']==2){
 		echo json_encode($resultado);
 	}
 	else{
-		$engomado = mysql_fetch_assoc(mysql_query("SELECT precio_compra FROM engoados_plazas WHERE plaza='{$_POST['cveplaza']}' AND engomado='{$_POST['engomado']}'"));
+		$engomado = mysql_fetch_assoc(mysql_query("SELECT precio_compra FROM engomados_plazas WHERE plaza='{$_POST['cveplaza']}' AND engomado='{$_POST['engomado']}'"));
 		$insert = " INSERT compra_certificados 
 						SET 
 							folio='{$_POST['folio']}',fecha_compra='{$_POST['fecha_compra']}',costo='{$engomado['precio_compra']}',

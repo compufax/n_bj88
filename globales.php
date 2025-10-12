@@ -512,7 +512,7 @@ function validar_timbres($plaza){
 
 
 function fecha_letra($fecha){
-   $fecven=split("-",$fecha);
+   $fecven=explode("-",$fecha);
    $fecha_letra=$fecven[2]." de ";;
    switch($fecven[1]){
       case "01":$fecha_letra.="Enero";break;

@@ -752,6 +752,9 @@ if ($_POST['cmd']==2) {
 			$ticket = $row['cve'];
 			$fechaticket=$row['fecha'].' '.$row['hora'];
 		}
+		if (!is_array($_POST['personales'])) {
+			$_POST['personales'] = array();
+		}
 		$insert = " INSERT certificados_cancelados
 							SET 
 							plaza = '{$_POST['cveplaza']}', fecha=CURDATE(), hora=CURTIME(), costo='$costo', 
