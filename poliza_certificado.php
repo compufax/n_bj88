@@ -70,7 +70,7 @@ function obtener_informacion($datos){
 			$row2 = mysql_fetch_array($res2);
 			$res3 = mysql_query("SELECT b.fecha,a.cve,b.cve FROM cobro_engomado a INNER JOIN certificados b ON a.plaza = b.plaza AND a.cve = b.ticket WHERE a.plaza = {$datos['cveplaza']} AND a.cve<{$row['ticket']} AND a.placa = '{$row['placa']}' AND a.estatus!='C' AND b.estatus!='C' AND b.engomado NOT IN (9,19) ORDER BY a.cve DESC LIMIT 1");
 			$row3 = mysql_fetch_array($res3);
-			$res1 = mysql_query("SELECT fecha,cve,monto FROM cobro_engomado WHERE plaza = {$datos['cveplaza']} AND cve<{$row['ticket']} AND placa = '{$row['placa']}' AND anio={$row['anio']}' AND estatus!='C' ORDER BY cve DESC LIMIT 1");
+			$res1 = mysql_query("SELECT fecha,cve,monto FROM cobro_engomado WHERE plaza = {$datos['cveplaza']} AND cve<{$row['ticket']} AND placa = '{$row['placa']}' AND anio={$row['anio']} AND estatus!='C' ORDER BY cve DESC LIMIT 1");
 			$row1 = mysql_fetch_array($res1);
 			$renglon['tipo'] = $tipo;
 			$renglon['consecutivo'] = $c;
