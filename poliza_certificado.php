@@ -66,7 +66,7 @@ function obtener_informacion($datos){
 			else{
 				$tipo='';
 			}
-			$res2 = mysql_query("SELECT a.fecha,a.cve,a.monto FROM cobro_engomado a INNER JOIN certificados b ON a.plaza = b.plaza AND a.cve = b.ticket WHERE a.plaza = {$datos['cveplaza']}' AND a.cve>{$row['ticket']} AND a.placa = '{$row['placa']}' AND a.estatus!='C' AND b.estatus!='C' ORDER BY a.cve LIMIT 1");
+			$res2 = mysql_query("SELECT a.fecha,a.cve,a.monto FROM cobro_engomado a INNER JOIN certificados b ON a.plaza = b.plaza AND a.cve = b.ticket WHERE a.plaza = {$datos['cveplaza']} AND a.cve>{$row['ticket']} AND a.placa = '{$row['placa']}' AND a.estatus!='C' AND b.estatus!='C' ORDER BY a.cve LIMIT 1");
 			$row2 = mysql_fetch_array($res2);
 			$res3 = mysql_query("SELECT b.fecha,a.cve,b.cve FROM cobro_engomado a INNER JOIN certificados b ON a.plaza = b.plaza AND a.cve = b.ticket WHERE a.plaza = {$datos['cveplaza']} AND a.cve<{$row['ticket']} AND a.placa = '{$row['placa']}' AND a.estatus!='C' AND b.estatus!='C' AND b.engomado NOT IN (9,19) ORDER BY a.cve DESC LIMIT 1");
 			$row3 = mysql_fetch_array($res3);
