@@ -32,7 +32,7 @@ function obtener_informacion($datos){
 		while($row = mysql_fetch_assoc($res)) {
 			if($fcertificado<0) $fcertificado = $row['certificado'];
 			if($fcertificado!=$row['certificado']){
-				$resOmiso = mysql_query("SELECT b.folio FROM compra_certificados a INNER JOIN compra_certificados_detalle b ON a.plaza = b.plaza AND a.cve = b.cvecompra WHERE a.plaza={$datos['cveplaza']} AND a.estatus!='C' AND a.engomado = {$row['engomadoentrega']} AND b.folio>={$fcertificado} AND b.folio<{$row['certificado']}' AND b.tipo=1 ORDER BY b.folio");
+				$resOmiso = mysql_query("SELECT b.folio FROM compra_certificados a INNER JOIN compra_certificados_detalle b ON a.plaza = b.plaza AND a.cve = b.cvecompra WHERE a.plaza={$datos['cveplaza']} AND a.estatus!='C' AND a.engomado = {$row['engomadoentrega']} AND b.folio>={$fcertificado} AND b.folio<{$row['certificado']} AND b.tipo=1 ORDER BY b.folio");
 				while($rowOmiso = mysql_fetch_array($resOmiso)){
 					$resultado['informacion'][] = array(
 						'tipo' => 'OMISO',
