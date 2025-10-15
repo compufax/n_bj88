@@ -142,7 +142,7 @@ function obtener_informacion($datos){
 	foreach($array_engomados as $rowE){
 		$select = "SELECT a.cve,a.fecha,a.placa, a.monto, IF(a.tipo_pago=6 OR a.tipo_pago=12,0,a.monto) as monto,a.tipo_pago,a.tipo_venta FROM cobro_engomado a  
 		LEFT JOIN certificados b ON a.plaza = b.plaza AND a.cve = b.ticket AND a.fecha=b.fecha AND b.estatus!='C'
-		WHERE a.plaza={$datos['cveplaza']}' AND a.fecha='{$datos['busquedafecha']}' AND a.engomado IN ({$rowE['cves']}) AND a.estatus!='C' AND a.monto > 0 AND ISNULL(b.cve) ORDER BY a.cve";
+		WHERE a.plaza={$datos['cveplaza']} AND a.fecha='{$datos['busquedafecha']}' AND a.engomado IN ({$rowE['cves']}) AND a.estatus!='C' AND a.monto > 0 AND ISNULL(b.cve) ORDER BY a.cve";
 		$res = mysql_query($select);
 		while($row = mysql_fetch_array($res)){
 			$renglon = array();
