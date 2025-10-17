@@ -363,7 +363,7 @@ function genera_arreglo_facturacion($plaza, $id, $tipo){
    // $documento['numerocuentapago']=$row1['cuenta_pago'];
    $documento['receptor']['codigo']=$row1['cve'];
    $documento['receptor']['rfc']=$row1['rfc'].$row1['homoclave'];
-   $documento['receptor']['nombre']=$row1['nombre'];
+   $documento['receptor']['nombre']=utf8_decode($row1['nombre']);
    $documento['receptor']['calle']=$row1['calle'];
    $documento['receptor']['num_ext']=$row1['numexterior'];
    $documento['receptor']['num_int']=$row1['numinterior'];

@@ -1063,7 +1063,7 @@ if($_POST['cmd']==10){
 			$row['serie'].' '.$row['folio'],
 			mostrar_fechas($row['fecha']).' '.$row['hora'],
 			utf8_encode($row['nomtipopag']),
-			utf8_encode($row['nomcliente']),
+			($row['nomcliente']),
 			utf8_encode($row['rfccli']),
 			utf8_encode($row['nomtipopagofac']),
 			number_format($row['total'],2),
