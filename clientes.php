@@ -142,7 +142,7 @@ if($_POST['cmd']==10){
 	while($row = mysql_fetch_assoc($res)){
 
 		$resultado['data'][] = array(
-			utf8_encode($row['nombre']),
+			($row['nombre']),
 			utf8_encode($row['rfc']),
 			utf8_encode($row['codigopostal']),
 			utf8_encode($row['email']),
