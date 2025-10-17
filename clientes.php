@@ -274,10 +274,10 @@ if($_POST['cmd']==2){
 		}	
 		
 		if($_POST['reg']>0){
-			mysql_query("UPDATE clientes SET nombre='".addslashes($_POST['nombre'])."', rfc='{$_POST['rfc']}'{$campos} WHERE cve = '{$_POST['reg']}'");
+			mysql_query("UPDATE clientes SET nombre='".addslashes(utf8_encode($_POST['nombre']))."', rfc='{$_POST['rfc']}'{$campos} WHERE cve = '{$_POST['reg']}'");
 		}
 		else{
-			mysql_query("INSERT clientes SET plaza='{$_POST['cveplaza']}', usuario='{$_POST['cveusuario']}', fechayhora=NOW(), nombre='".addslashes($_POST['nombre'])."', rfc='{$_POST['rfc']}'{$campos}");
+			mysql_query("INSERT clientes SET plaza='{$_POST['cveplaza']}', usuario='{$_POST['cveusuario']}', fechayhora=NOW(), nombre='".addslashes(utf8_encode($_POST['nombre']))."', rfc='{$_POST['rfc']}'{$campos}");
 			$proveedor_id = mysql_insert_id($MySQL);
 		}
 
