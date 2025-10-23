@@ -336,6 +336,79 @@ if($_POST['cmd']==30){
 
 	exit();
 }
+
+if($_POST['cmd']==21){
+	$factura = $_POST['factura'];
+	$rsSucursal = mysql_query("SELECT * FROM datosempresas WHERE plaza = '{$_POST['cveplaza']}'");
+	$Sucursal = mysql_fetch_assoc($rsSucursal);
+	$documento = genera_arreglo_facturacion($_POST['cveplaza'], $_POST['factura'], 'I');
+	require_once('nusoap/nusoap.php');
+	$oSoapClient = new nusoap_client("https://servicios.integratucfdi.net/wscfdi.php?wsdl", true);
+	$err = $oSoapClient->getError();
+	if($err!="")
+		echo "error1:".$err;
+	else{
+		//print_r($documento);
+		$oSoapClient->timeout = 300;
+		$oSoapClient->response_timeout = 300;
+		$respuesta = $oSoapClient->call("generarComprobante", array ('id' => $Sucursal['idplaza'],'rfcemisor' => $Sucursal['rfc'],'idcertificado' => $Sucursal['idcertificado'],'documento' => $documento, 'usuario' => $Sucursal['usuario'],'password' => $Sucursal['pass']));
+		if ($oSoapClient->fault) {
+			echo '<p><b>Fault: ';
+			print_r($respuesta);
+			echo '</b></p>';
+			echo '<p><b>Request: <br>';
+			echo htmlspecialchars($oSoapClient->request, ENT_QUOTES) . '</b></p>';
+			echo '<p><b>Response: <br>';
+			echo htmlspecialchars($oSoapClient->response, ENT_QUOTES) . '</b></p>';
+			echo '<p><b>Debug: <br>';
+			echo htmlspecialchars($oSoapClient->debug_str, ENT_QUOTES) . '</b></p>';
+		}
+		else{
+			$err = $oSoapClient->getError();
+			if ($err){
+				echo '<p><b>Error: ' . $err . '</b></p>';
+				echo '<p><b>Request: <br>';
+				echo htmlspecialchars($oSoapClient->request, ENT_QUOTES) . '</b></p>';
+				echo '<p><b>Response: <br>';
+				echo htmlspecialchars($oSoapClient->response, ENT_QUOTES) . '</b></p>';
+				echo '<p><b>Debug: <br>';
+				echo htmlspecialchars($oSoapClient->debug_str, ENT_QUOTES) . '</b></p>';
+			}
+			else{
+				if($respuesta['resultado']){
+					//Tomar la informacion de Retorno
+					$dir="cfdi/comprobantes/";
+					//$dir=dirname(realpath(getcwd()))."/solucionesfe_facturacion/cfdi/comprobantes/";
+					//el zip siempre se deja fuera
+					$dir2="cfdi/";
+					//Leer el Archivo Zip
+					$fileresult=$respuesta['archivos'];
+					$strzipresponse=base64_decode($fileresult);
+					$filename='cfdi_'.$_POST['cveplaza'].'_'.$factura;
+					file_put_contents($dir2.$filename.'.zip', $strzipresponse);
+					$zip = new ZipArchive;
+					if ($zip->open($dir2.$filename.'.zip') === TRUE){
+						$strxml=$zip->getFromName('xml.xml');
+						file_put_contents($dir.$filename.'.xml', $strxml);
+						$zip->close();		
+						@unlink("cfdi/cfdi_{$_POST['cveplaza']}_{$factura}.zip");
+					}
+					else 
+						$strmsg='Error al descomprimir el archivo';
+						
+					echo 'Se obtuvo el XML de forma correcta ';
+				}
+				else{
+					$strmsg=$respuesta['mensaje'];
+					echo $strmsg;
+				}
+				
+			}
+		}
+	}
+	exit();
+}
+
 if($_POST['cmd']==20){
 	$factura = $_POST['factura'];
 	$rsFactura = mysql_query("SELECT * FROM facturas WHERE plaza='{$_POST['cveplaza']}' AND cve = '{$_POST['factura']}'");
@@ -822,6 +895,24 @@ if($_POST['cmd']==0){
 		});
 	}
 
+	function obtenerxml(factura){
+		waitingDialog.show();
+		$.ajax({
+			url: 'facturas.php',
+			type: "POST",
+			data: {
+				cmd: 21,
+				cveplaza: $('#cveplaza').val(),
+				factura: factura
+			},
+			success: function(data) {
+				waitingDialog.hide();
+				sweetAlert('', data, 'success');
+				buscar();
+			}
+		});
+	}
+
 
 	function reenviarcorreo(factura){
 		waitingDialog.show();
@@ -1008,7 +1099,13 @@ if($_POST['cmd']==10){
 			$chk = '';
 		}
 		if($row['respuesta1'] != ''){
-			$extras .= '<a class="dropdown-item" href="#" onClick="atcr(\'cfdi/comprobantes/cfdi_'.$row['plaza'].'_'.$row['cve'].'.xml\',\'_blank\',\'\','.$row['cve'].')">XML</a>';
+			if(file_exists("cfdi/comprobantes/cfdi_{$row['plaza']}_{$row['cve']}.xml")){
+				$extras .= '<a class="dropdown-item" href="#" onClick="atcr(\'facturas.php\',\'_blank\',101,'.$row['cve'].')">XML</a>';
+			}
+			else{
+				$extras .= '<a class="dropdown-item" href="#" onClick="obtenerxml('.$row['cve'].')">Obtener XML</a>';
+			}
+			$extras .= '&nbsp;<i class="fas fa-file-code fa-sm fa-fw mr-2 text-primary" style="cursor:pointer;" onClick="atcr(\'facturas.php\',\'_blank\',101,'.$row['cve'].')" title="XML"></i>';
 			$extras .= '<a class="dropdown-item" href="#" onClick="reenviarcorreo('.$row['cve'].')">Reenviar correo</a>';
 		}
 		if($row['estatus'] != 'C' && $nivelUsuario>2){
