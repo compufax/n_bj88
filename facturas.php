@@ -1105,7 +1105,6 @@ if($_POST['cmd']==10){
 			else{
 				$extras .= '<a class="dropdown-item" href="#" onClick="obtenerxml('.$row['cve'].')">Obtener XML</a>';
 			}
-			$extras .= '&nbsp;<i class="fas fa-file-code fa-sm fa-fw mr-2 text-primary" style="cursor:pointer;" onClick="atcr(\'facturas.php\',\'_blank\',101,'.$row['cve'].')" title="XML"></i>';
 			$extras .= '<a class="dropdown-item" href="#" onClick="reenviarcorreo('.$row['cve'].')">Reenviar correo</a>';
 		}
 		if($row['estatus'] != 'C' && $nivelUsuario>2){
